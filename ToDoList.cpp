@@ -39,31 +39,23 @@ void ToDoList::removeTask(const int taskId, int& taskCount)
     std::ofstream temp("temp.txt");
     std::string line;
     int trashInt;
-    char trashPoint;
-    bool deleted = false;
 
-    for(int i = 1; i < taskCount; i++)
+    for(int i = 1; i < taskId; i++)
     {
-        if(i != taskId || deleted)
-        {
-            taskFile >> trashInt;
-            taskFile >> trashPoint;
-            getline(taskFile, line);
-            std::cout << line << '\n';
-            temp << i << '.' << line << '\n';
-        }
-        else
-        {
-            taskFile >> trashInt;
-            taskFile >> trashPoint;
-            getline(taskFile, line);
-            i--;
-            deleted = true;
-        }
-
+        getline(taskFile, line);
+        temp << line << '\n';
     }
 
+    getline(taskFile, line);
+
     taskCount--;
+
+    for(int i = taskId; i < taskCount; i++)
+    {
+        taskFile >> trashInt;
+        getline(taskFile, line);
+        temp << i << line << '\n';
+    }
 
     taskFile.close();
     temp.close();
@@ -78,14 +70,9 @@ void ToDoList::getTaskCount(int& taskCount)
     std::string line;
     taskCount = 0;
 
-    if(taskFile)
-    {
-          while(getline(taskFile, line))
-            taskCount++;
-    }
-    else
-    {
-        taskCount = 1;
-    }
+    while(getline(taskFile, line))
+        taskCount++;
+
+    taskCount++;
 
 }
